@@ -163,8 +163,8 @@
         "description": "Memory",
         "hidden": false,
         "immutable": false,
-        "label": "Memory",
-        "name": "memory",
+        "label": "Memory_RedHat",
+        "name": "memory_red",
         "required": true,
         "secured": false,
         "type": "string",
@@ -177,6 +177,18 @@
               "value": "4096",
               "label": "4 GB"
           }
+              {
+              "value": "8192",
+              "label": "8 GB"
+          },
+              {
+              "value": "16384",
+              "label": "16 GB"
+          },
+              {
+              "value": "32768",
+              "label": "32 GB"
+          },
         ],
         "group": "virtualmachine"
     },
