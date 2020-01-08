@@ -77,7 +77,25 @@ resource "ibm_compute_ssh_key" "temp_public_key" {
 # Create Virtual Machine and install MongoDB
 ##############################################################
   
-  resource "ibm_compute_vm_instance" "softlayer_virtual_guest" {
+  resource "ibm_compute_vm_instance" "softlayer_virtual_guest1" {
+  hostname                 = "${var.hostname}"
+  os_reference_code        = "UBUNTU_18_64"
+  domain                   = "cam.ibm.com"
+  datacenter               = "${var.datacenter}"
+  network_speed            = 10
+  hourly_billing           = true
+  private_network_only     = false
+  cores                    = 1
+  memory                   = "${var.memory_ubuntu}"
+  disks                    = [25]
+  dedicated_acct_host_only = false
+  local_disk               = false
+  ssh_key_ids              = ["${ibm_compute_ssh_key.cam_public_key.id}", "${ibm_compute_ssh_key.temp_public_key.id}"]
+  tags                     = ["${module.camtags.tagslist}"]
+  }
+  
+    
+  resource "ibm_compute_vm_instance" "softlayer_virtual_guest2" {
   hostname                 = "${var.hostname}"
   os_reference_code        = "REDHAT_7_64"
   domain                   = "cam.ibm.com"
@@ -93,36 +111,80 @@ resource "ibm_compute_ssh_key" "temp_public_key" {
   ssh_key_ids              = ["${ibm_compute_ssh_key.cam_public_key.id}", "${ibm_compute_ssh_key.temp_public_key.id}"]
   tags                     = ["${module.camtags.tagslist}"]
   }
-
-  #Specify the ssh connection
-  connection {
-  user        = "root"
-  private_key = "${tls_private_key.ssh.private_key_pem}"
-  host        = "${self.ipv4_address}"
-  bastion_host        = "${var.bastion_host}"
-  bastion_user        = "${var.bastion_user}"
-  bastion_private_key = "${length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
-  bastion_port        = "${var.bastion_port}"
-  bastion_host_key    = "${var.bastion_host_key}"
-  bastion_password    = "${var.bastion_password}"
+  
+   resource "ibm_compute_vm_instance" "softlayer_virtual_guest3" {
+  hostname                 = "${var.hostname}"
+  os_reference_code        = "WIN_2012-STD-R2_64"
+  domain                   = "cam.ibm.com"
+  datacenter               = "${var.datacenter}"
+  network_speed            = 10
+  hourly_billing           = true
+  private_network_only     = false
+  cores                    = 2
+  memory                   = "${var.memory_windows}"
+  disks                    = [100]
+  dedicated_acct_host_only = false
+  local_disk               = false
+  tags                     = ["${module.camtags.tagslist}"]
   }
+
+
+  # Specify the ssh connection
+  #connection {
+  #  user        = "root"
+  #  private_key = "${tls_private_key.ssh.private_key_pem}"
+  #  host        = "${self.ipv4_address}"
+  #  bastion_host        = "${var.bastion_host}"
+  #  bastion_user        = "${var.bastion_user}"
+  #  bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
+  #  bastion_port        = "${var.bastion_port}"
+  #  bastion_host_key    = "${var.bastion_host_key}"
+  #  bastion_password    = "${var.bastion_password}"
+  #}
 
   # Create the installation script
+  #provisioner "file" {
+  #  content = <<EOF
+#!/bin/bash
 
+#set -o errexit
+#set -o nounset
+#set -o pipefail
+
+#LOGFILE="/var/log/install_nodejs.log"
+
+#echo "---start installing node.js---" | tee -a $LOGFILE 2>&1
+
+#yum install gcc-c++ make -y                                                        >> $LOGFILE 2>&1 || { echo "---Failed to install build tools---" | tee -a $LOGFILE; exit 1; }
+#curl -sL https://rpm.nodesource.com/setup_7.x | bash -                             >> $LOGFILE 2>&1 || { echo "---Failed to install the NodeSource Node.js 7.x repo---" | tee -a $LOGFILE; exit 1; }
+#yum install nodejs -y                                                              >> $LOGFILE 2>&1 || { echo "---Failed to install node.js---"| tee -a $LOGFILE; exit 1; }
+
+#echo "---finish installing node.js---" | tee -a $LOGFILE 2>&1
+
+#EOF
+
+#    destination = "/tmp/installation.sh"
+#}
 
   # Execute the script remotely
-  provisioner "remote-exec" {
-   inline = [
-      "wget -O /tmp/CarbonBlackLinuxInstaller-v6.2.2.10003.tar.gz https://ibm.box.com/shared/static/9kdcte9l2xllawpa7eu4s72h7fogcm6g.gz; gzip -d /tmp/CarbonBlackLinuxInstaller-v6.2.2.10003.tar.gz ; tar -xvf /tmp/CarbonBlackLinuxInstaller-v6.2.2.10003.tar; chmod +X /tmp/* ; bash /tmp/CarbonBlackLinuxInstaller-v6.2.2.10003.sh"
-    ]
-  }
+#  provisioner "remote-exec" {
+#   inline = [
+#      "chmod +x /tmp/installation.sh; bash /tmp/installation.sh",
+#    ]
+#  }
+#}
+
 #########################################################
 # Output
 #########################################################
-
+output "server_ip_address_ubnutu" {
+  value = "${ibm_compute_vm_instance.softlayer_virtual_guest1.ipv4_address}"
+}
 output "server_ip_address_redhat" {
-  value = "${ibm_compute_vm_instance.softlayer_virtual_guest.ipv4_address}"
+  value = "${ibm_compute_vm_instance.softlayer_virtual_guest2.ipv4_address}"
 }
 
-
+output "server_ip_address_windows" {
+  value = "${ibm_compute_vm_instance.softlayer_virtual_guest3.ipv4_address}"
+}
   
