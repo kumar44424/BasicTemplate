@@ -162,9 +162,9 @@
         "description": "Memory allocated to the Virtual Instance",
         "hidden": false,
         "immutable": false,
-        "label": "Memory_RedHat",
+        "label": "Memory",
         "name": "memory",
-        "required": true,
+        "required":true,
         "secured": false,
         "type": "string",
         "options": [
