@@ -160,32 +160,10 @@
     },
     
     {
-        "description": " Opearing systems",
-        "hidden": false,
-        "immutable": false,
-        "label": "Operating System",
-        "name": "os_reference_code",
-        "required": true,
-        "secured": false,
-        "type": "string",
-        "options": [
-          {
-              "value": "REDHAT_7_64",
-              "label": "RedHat Linux Version 7"
-          },
-          {
-              "value": "CENTOS_7_64",
-              "label": "Cent OS Version 7"
-          }
-        ],
-        "group": "virtualmachine"
-    },
-    
-       {
         "description": "Memory allocated to the Virtual Instance",
         "hidden": false,
         "immutable": false,
-        "label": "Memory",
+        "label": "Memory_RedHat",
         "name": "memory_red",
         "required": true,
         "secured": false,
@@ -218,7 +196,7 @@
         "description": "Memory allocated to the Virtual Instance",
         "hidden": false,
         "immutable": false,
-        "label": "Memory",
+        "label": "Memory_Ubuntu",
         "name": "memory_ubuntu",
         "required": true,
         "secured": false,
@@ -252,7 +230,7 @@
         "description": "Memory allocated to the Virtual Instance",
         "hidden": false,
         "immutable": false,
-        "label": "Memory",
+        "label": "Memory_Windows",
         "name": "memory_windows",
         "required": true,
         "secured": false,
