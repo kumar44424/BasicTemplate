@@ -158,7 +158,40 @@
         ],
         "group": "virtualmachine"
     },
-    
+    {
+        "description": "Memory allocated to the Virtual Instance",
+        "hidden": false,
+        "immutable": false,
+        "label": "Memory_RedHat",
+        "name": "memory",
+        "required": true,
+        "secured": false,
+        "type": "string",
+        "options": [
+          {
+              "value": "2048",
+              "label": "2 GB"
+          },
+          {
+              "value": "4096",
+              "label": "4 GB"
+          },
+          {
+              "value": "8192",
+              "label": "8 GB"
+          },
+          {
+              "value": "16384",
+              "label": "16 GB"
+          },
+          {
+              "value": "32768",
+              "label": "32 GB"
+          },
+        ],
+        "group": "virtualmachine"
+    },
+
     
     
     {
