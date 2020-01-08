@@ -77,7 +77,7 @@ resource "ibm_compute_ssh_key" "temp_public_key" {
 # Create Virtual Machine and install MongoDB
 ##############################################################
   
-  resource "ibm_compute_vm_instance" "softlayer_virtual_guest2" {
+  resource "ibm_compute_vm_instance" "softlayer_virtual_guest" {
   hostname                 = "${var.hostname}"
   os_reference_code        = "REDHAT_7_64"
   domain                   = "cam.ibm.com"
@@ -101,7 +101,7 @@ resource "ibm_compute_ssh_key" "temp_public_key" {
   host        = "${self.ipv4_address}"
   bastion_host        = "${var.bastion_host}"
   bastion_user        = "${var.bastion_user}"
-  bastion_private_key = "${ length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
+  bastion_private_key = "${length(var.bastion_private_key) > 0 ? base64decode(var.bastion_private_key) : var.bastion_private_key}"
   bastion_port        = "${var.bastion_port}"
   bastion_host_key    = "${var.bastion_host_key}"
   bastion_password    = "${var.bastion_password}"
@@ -121,7 +121,7 @@ resource "ibm_compute_ssh_key" "temp_public_key" {
 #########################################################
 
 output "server_ip_address_redhat" {
-  value = "${ibm_compute_vm_instance.softlayer_virtual_guest2.ipv4_address}"
+  value = "${ibm_compute_vm_instance.softlayer_virtual_guest.ipv4_address}"
 }
 
 
